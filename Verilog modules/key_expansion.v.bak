@@ -1,0 +1,146 @@
+`timescale 1ns /1ps
+module key_ex(
+k_in0,
+k_in1,
+k_in2,
+k_in3,
+out0,out1,out2,out3,out4,out5,out6,out7,out8,out9,out10,out11,out12,out13,out14,out15,
+clk,
+rst,
+s_out0,s_out1,s_out2,s_out3,
+s_in0,s_in1,s_in2,s_in3,s_rd_en,s_done,rcon_rd_en,
+rcon_in,
+key_en
+);
+//input signals 
+input [7:0] k_in0,k_in1,k_in2,k_in3;
+input [7:0] rcon_in;
+input clk,rst,key_en,s_done;
+input [7:0] s_out0,s_out1,s_out2,s_out3;
+
+//output signals
+output [7:0] out0,out1,out2,out3,out4,out5,out6,out7,out8,out9,out10,out11,out12,out13,out14,out15;
+output s_rd_en;
+output [7:0] s_in0,s_in1,s_in2,s_in3;
+//wires and reg
+
+wire [7:0] s_out0,s_out1,s_out2,s_out3;
+wire [7:0] k_in0,k_in1,k_in2,k_in3;
+wire [7:0] rcon_in;
+wire clk,rst;
+
+reg [7:0] out0,out1,out2,out3,out4,out5,out6,out7,out8,out9,out10,out11,out12,out13,out14,out15;
+//reg [7:0] rcon_out;
+reg [7:0] s_in0,s_in1,s_in2,s_in3;
+reg s_rd_en,rcon_rd_en;
+
+// additional regs 
+reg [7:0] in0,in1,in2,in3,in4,in5,in6,in7,in8,in9,in10,in11,in12,in13,in14,in15;
+integer count;
+
+always@(posedge clk)
+begin
+if(key_en == 1'b1)
+begin
+count =0;
+end
+if(count == 0)
+begin
+in0 = k_in0;
+in1 = k_in1;
+in2 = k_in2;
+in3 = k_in3;
+count = count +1;
+end
+else if(count == 1)
+begin
+in4 = k_in0;
+in5 = k_in1;
+in6 = k_in2;
+in7 = k_in3;
+count = count +1;
+end
+else if(count == 2)
+begin
+in8 = k_in0;
+in9 = k_in1;
+in10 = k_in2;
+in11 = k_in3;
+count = count +1;
+end
+else if(count == 3)
+begin
+in15 = k_in0;
+in12 = k_in1;
+in13 = k_in2;
+in14 = k_in3;
+count = count +1;
+s_rd_en = 1'b1;
+rcon_rd_en = 1'b1;
+s_in0 = in15;
+s_in1 = in12;
+s_in2 = in13;
+s_in3 = in14;
+
+end
+
+else
+begin
+if(s_done == 1'b1)
+begin
+ in12 =s_out0;
+ in13 =s_out1;
+ in14 =s_out2;
+ in15 =s_out3;
+ s_rd_en = 1'b0; 
+ rcon_rd_en =1'b0;
+ 
+ out0 = in12 ^ in0 ^ rcon_in;
+ out1 = in13 ^ in1;
+ out2 = in14 ^ in2;
+ out3 = in15 ^ in3;
+ 
+ out4 = out0 ^ in4;
+ out5 = out1 ^ in5;
+ out6 = out2 ^ in6;
+ out7 = out3 ^ in7;
+ 
+ out8 = out4 ^ in8;
+ out9 = out5 ^ in9;
+ out10 = out6 ^ in10;
+ out11 = out7 ^ in11;
+ 
+ out12 = out8 ^ in4;
+ out13 = out9 ^ in5;
+ out14 = out10 ^ in6;
+ out15 = out11 ^ in7;
+end
+else
+begin
+
+ 
+ out0 = 8'b0;
+ out1 = 8'b0;
+ out2 = 8'b0;
+ out3 = 8'b0;
+ 
+ out4 = 8'b0;
+ out5 = 8'b0;
+ out6 = 8'b0;
+ out7 = 8'b0;
+ 
+ out8 = 8'b0;
+ out9 = 8'b0;
+ out10 = 8'b0;
+ out11 = 8'b0;
+ 
+ out12 = 8'b0;
+ out13 = 8'b0;
+ out14 = 8'b0;
+ out15 = 8'b0;
+
+end
+  
+end
+end
+endmodule
